@@ -4,6 +4,12 @@ const day  = document.querySelector('#day')
 const month  = document.querySelector('#month')
 const year  = document.querySelector('#year')
 const btn = document.querySelector('.button')
+const CalcedDay = document.querySelector('.day')
+const CalcedMonth = document.querySelector('.month')
+const CalcedYear = document.querySelector('.year')
+const invalidDay = document.querySelector('.invalid__day')
+const invalidMonth = document.querySelector('.invalid__month')
+const invalidYear = document.querySelector('.invalid__year')
 
 btn.addEventListener('click', function(){
     console.log(day.value, month.value, year.value);
@@ -19,35 +25,81 @@ btn.addEventListener('click', function(){
     console.log(yourDate);
     // Obecna data
     const todayDate = new Date()
-    const nowDate = todayDate.getDay()
+    const nowDate = todayDate.getDate()
     const nowMonth = todayDate.getMonth()
     const nowYear = todayDate.getFullYear()
 
     //
     function areYouInTheFuture(){
-        if (todayDate < yourDate){
-            alert('tak')
+        if (todayDate > yourDate){
+            return true
+        }else{
+            return false
         }
     }
+    console.log(areYouInTheFuture());
+
     function correctData(){
-        if(m < 13 && y <= nowYear){
+        if(m < 13 && m > 0 && y <= nowYear){
             if(shortMonth.includes(m) && d <=30 && d > 0){
-                alert('kot')
+                return true
             }
-         else if( longMonth.includes(m) && d <=31 && d > 0){
-                alert('no')
+            else if( longMonth.includes(m) && d <=31 && d > 0){
+                return true
             }else if( m === February && d <= 29 && d > 0 ){
-                alert('yes')
+                return true
             }else{
-                alert('hk')
+                invalidDay.textContent = 'Must be a valid day'
+                return false
             }
+           
+        }else{
+            return false
         }
     }
-    correctData()
+    console.log(correctData());
+    
 
+    function calcDay(){
+        if(shortMonth.includes(m)){
+         CalcedDay.textContent = nowDate + (31 - d)  
+        }else if(longMonth.includes(m)){
+           CalcedDay.textContent = nowDate + (31   - d)  
+        }else{
+            CalcedDay.textContent = nowDate + (29 - d)
+        }
+    }
+    function calcMonth(){
+        CalcedMonth.textContent = 12 - m
+    }
 
-    // Is data correct
+    function calcYear(){
+        CalcedYear.textContent = nowYear - y -1
+    }
 
+    if(areYouInTheFuture() && correctData()){
+        calcDay()
+        calcMonth()
+        calcYear()
+        invalidMonth.textContent =  invalidYear.textContent =  invalidDay.textContent =' '
+    }
+    if( m >12 || m < 0  ){
+        invalidMonth.textContent ="Must be a valid month"
+    }
+    if( y > nowYear){
+        invalidYear.textContent="Must be in the past"
+    }if( d > 31){
+        invalidDay.textContent = 'Must be a valid day'
+    }
+    if(d === NaN){
+         invalidDay.textContent = 'This field is required'
+    }
+    if(m === NaN){
+         invalidMonth.textContent = 'This field is required'
+    }
+    if(y === NaN){
+         invalidYear.textContent = 'This field is required'
+    }
 })
 
 
